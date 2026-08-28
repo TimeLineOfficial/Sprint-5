@@ -152,7 +152,7 @@ button {
   margin: 0 auto;
 }
 
-/* Header Controls & Filters */
+/* Header Controls & Unified Controls */
 .header-controls {
   display: flex;
   align-items: center;
@@ -236,21 +236,20 @@ button {
   border-color: var(--color-primary);
 }
 
-/* Mobile Header Controls */
-.mobile-only {
+/* Responsive Control Toggles */
+.mobile-filter-toggle {
   display: none;
 }
 
-.desktop-only {
-  display: flex;
+.theme-btn-label {
+  display: inline-block;
 }
 
-.mobile-header-actions {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
+.create-task-label {
+  display: inline-block;
 }
 
+/* Mobile Filter Drawer */
 .mobile-filter-drawer {
   background: var(--bg-surface);
   border-bottom: 1px solid var(--border-color);
@@ -347,11 +346,13 @@ button {
 }
 
 @media (max-width: 767.98px) {
-  .desktop-only {
+  .desktop-search,
+  .desktop-priority,
+  .desktop-reset {
     display: none !important;
   }
 
-  .mobile-only {
+  .mobile-filter-toggle {
     display: flex !important;
   }
 
@@ -375,30 +376,29 @@ button {
   }
 }
 
+@media (max-width: 640px) {
+  .theme-btn-label {
+    display: none;
+  }
+  .theme-btn {
+    padding: 0.5rem 0.65rem;
+  }
+}
+
 @media (max-width: 480px) {
-  .theme-btn-mobile {
-    padding: 0.4rem 0.6rem;
+  .create-task-label {
+    display: none;
   }
-
-  .btn-primary-compact {
-    padding: 0.4rem 0.75rem;
-    font-size: 0.8125rem;
+  .create-task-btn {
+    padding: 0.5rem 0.75rem;
   }
-
   .modal-overlay {
     padding: 0.875rem;
   }
-
   .modal-content {
     padding: 1.25rem;
     max-height: 90vh;
     overflow-y: auto;
-  }
-}
-
-@media (max-width: 360px) {
-  .btn-text-hide-xs {
-    display: none;
   }
 }
 

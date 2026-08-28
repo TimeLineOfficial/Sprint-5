@@ -17,10 +17,10 @@ export const Header = memo(function Header({ onOpenCreateModal, theme, onToggleT
           <span>Task<span style={{ color: 'var(--color-primary)' }}>Pulse</span></span>
         </a>
 
-        {/* Desktop Controls Group */}
-        <div className="header-controls desktop-only">
-          {/* Search Input Box */}
-          <div className="search-bar">
+        {/* Single Unified Header Controls */}
+        <div className="header-controls">
+          {/* Search Input Box (Desktop/Tablet) */}
+          <div className="search-bar desktop-search">
             <Search size={16} style={{ color: 'var(--text-muted)' }} />
             <input
               type="search"
@@ -32,9 +32,9 @@ export const Header = memo(function Header({ onOpenCreateModal, theme, onToggleT
             />
           </div>
 
-          {/* Priority Filter Dropdown */}
+          {/* Priority Filter Dropdown (Desktop/Tablet) */}
           <select
-            className="priority-select"
+            className="priority-select desktop-priority"
             value={priorityFilter}
             onChange={(e) => setPriorityFilter(e.target.value)}
             aria-label="Filter tasks by priority"
@@ -46,21 +46,21 @@ export const Header = memo(function Header({ onOpenCreateModal, theme, onToggleT
             <option value="low">🟢 Low</option>
           </select>
 
-          {/* Theme Toggle Button (Always Visible) */}
+          {/* Single Theme Toggle Button */}
           <button
             type="button"
-            className="btn-secondary"
+            className="btn-secondary theme-btn"
             onClick={onToggleTheme}
             aria-label="Toggle light or dark theme"
           >
             {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
-            <span className="theme-label">{theme === 'dark' ? 'Light' : 'Dark'}</span>
+            <span className="theme-btn-label">{theme === 'dark' ? 'Light' : 'Dark'}</span>
           </button>
 
-          {/* Reset Board */}
+          {/* Reset Board Button (Desktop/Tablet) */}
           <button
             type="button"
-            className="btn-secondary"
+            className="btn-secondary desktop-reset"
             onClick={resetBoard}
             title="Reset board tasks to initial state"
             aria-label="Reset board tasks"
@@ -68,53 +68,29 @@ export const Header = memo(function Header({ onOpenCreateModal, theme, onToggleT
             <RotateCcw size={16} />
           </button>
 
-          {/* New Task CTA */}
+          {/* Mobile Filter & Search Drawer Toggle (Phone <768px only) */}
           <button
             type="button"
-            className="btn-primary"
-            onClick={() => onOpenCreateModal('todo')}
-          >
-            <Plus size={18} />
-            <span>Create Task</span>
-          </button>
-        </div>
-
-        {/* Mobile Action Bar (<768px Viewports) */}
-        <div className="mobile-header-actions mobile-only">
-          {/* Always-Visible Theme Toggle Button on Phone Screen Header */}
-          <button
-            type="button"
-            className="btn-secondary theme-btn-mobile"
-            onClick={onToggleTheme}
-            aria-label="Toggle light or dark theme"
-          >
-            {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
-          </button>
-
-          {/* Compact Create Task Button for Mobile */}
-          <button
-            type="button"
-            className="btn-primary btn-primary-compact"
-            onClick={() => onOpenCreateModal('todo')}
-            aria-label="Create Task"
-          >
-            <Plus size={18} />
-            <span className="btn-text-hide-xs">Create</span>
-          </button>
-
-          {/* Mobile Filter & Search Drawer Toggle */}
-          <button
-            type="button"
-            className="btn-secondary filter-toggle-mobile"
+            className="btn-secondary mobile-filter-toggle"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             aria-label="Toggle filter menu"
           >
             {isMobileMenuOpen ? <X size={18} /> : <SlidersHorizontal size={18} />}
           </button>
+
+          {/* Single Create Task CTA */}
+          <button
+            type="button"
+            className="btn-primary create-task-btn"
+            onClick={() => onOpenCreateModal('todo')}
+          >
+            <Plus size={18} />
+            <span className="create-task-label">Create Task</span>
+          </button>
         </div>
       </div>
 
-      {/* Mobile Expandable Search & Filter Drawer */}
+      {/* Mobile Search & Filter Drawer (<768px) */}
       {isMobileMenuOpen && (
         <div className="mobile-filter-drawer">
           <div className="mobile-search-bar">
