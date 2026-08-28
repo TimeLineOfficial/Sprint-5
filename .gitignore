@@ -11,14 +11,8 @@ pids
 *.seed
 *.pid.lock
 
-# Directory for instrumented code leveraged by Istanbul
-coverage
-
 # Node modules
 node_modules/
-
-# Production build output
-dist/
 
 # Local env files
 .env
