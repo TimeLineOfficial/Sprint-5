@@ -1,9 +1,10 @@
-import React, { memo, useCallback } from 'react';
+import React, { memo, useCallback, useState } from 'react';
 import { useTasks } from '../context/TaskContext';
-import { Calendar, Edit3, Trash2 } from 'lucide-react';
+import { Calendar, Edit3, Trash2, ArrowRightLeft } from 'lucide-react';
 
 export const TaskCard = memo(function TaskCard({ task, onEdit, isDragging, onDragStart, onDragEnd }) {
-  const { deleteTask, toggleSubtask } = useTasks();
+  const { deleteTask, toggleSubtask, moveTask, columns } = useTasks();
+  const [showMoveMenu, setShowMoveMenu] = useState(false);
 
   const handleSubtaskToggle = useCallback((subtaskId, e) => {
     e.stopPropagation();
@@ -21,6 +22,12 @@ export const TaskCard = memo(function TaskCard({ task, onEdit, isDragging, onDra
     e.stopPropagation();
     onEdit(task);
   }, [task, onEdit]);
+
+  const handleMoveToColumn = useCallback((targetColId, e) => {
+    e.stopPropagation();
+    moveTask(task.id, targetColId);
+    setShowMoveMenu(false);
+  }, [task.id, moveTask]);
 
   const subtasksTotal = task.subtasks ? task.subtasks.length : 0;
   const subtasksCompleted = task.subtasks ? task.subtasks.filter(s => s.completed).length : 0;
@@ -44,6 +51,21 @@ export const TaskCard = memo(function TaskCard({ task, onEdit, isDragging, onDra
         </div>
 
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
+          {/* Mobile Tap-to-Move Button */}
+          <button
+            type="button"
+            className="mobile-move-btn"
+            style={{ color: 'var(--color-primary)', padding: '0.2rem' }}
+            onClick={(e) => {
+              e.stopPropagation();
+              setShowMoveMenu(!showMoveMenu);
+            }}
+            title="Move to Column"
+            aria-label="Move task to another column"
+          >
+            <ArrowRightLeft size={14} />
+          </button>
+
           <button
             type="button"
             style={{ color: 'var(--text-muted)', padding: '0.2rem' }}
@@ -64,6 +86,26 @@ export const TaskCard = memo(function TaskCard({ task, onEdit, isDragging, onDra
           </button>
         </div>
       </div>
+
+      {/* Mobile Column Switcher Popup Menu */}
+      {showMoveMenu && (
+        <div className="mobile-column-picker">
+          <span className="picker-title">Move Task to:</span>
+          <div className="picker-buttons">
+            {columns.map(col => (
+              <button
+                key={col.id}
+                type="button"
+                className={`picker-btn ${col.id === task.columnId ? 'picker-btn--active' : ''}`}
+                onClick={(e) => handleMoveToColumn(col.id, e)}
+              >
+                <span className="picker-dot" style={{ backgroundColor: col.color }} />
+                <span>{col.title}</span>
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
 
       {/* Task Title & Description */}
       <h4 className="task-title">{task.title}</h4>
