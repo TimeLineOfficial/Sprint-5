@@ -4,6 +4,7 @@ import { LayoutGrid, Plus, Search, Moon, Sun, RotateCcw, SlidersHorizontal, X } 
 
 export const Header = memo(function Header({ onOpenCreateModal, theme, onToggleTheme }) {
   const { searchQuery, setSearchQuery, priorityFilter, setPriorityFilter, resetBoard } = useTasks();
+  const [isSearchExpanded, setIsSearchExpanded] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   return (
@@ -17,11 +18,20 @@ export const Header = memo(function Header({ onOpenCreateModal, theme, onToggleT
           <span>Task<span style={{ color: 'var(--color-primary)' }}>Pulse</span></span>
         </a>
 
-        {/* Single Unified Header Controls */}
+        {/* Header Controls Container */}
         <div className="header-controls">
-          {/* Search Input Box (Desktop/Tablet) */}
-          <div className="search-bar desktop-search">
-            <Search size={16} style={{ color: 'var(--text-muted)' }} />
+          {/* Universal Search Bar & Search Icon (Visible on all devices) */}
+          <div className={`search-bar ${isSearchExpanded ? 'search-bar--expanded' : ''}`}>
+            <button
+              type="button"
+              className="search-icon-btn"
+              onClick={() => setIsSearchExpanded(!isSearchExpanded)}
+              aria-label="Toggle search input"
+              title="Search tasks"
+            >
+              <Search size={18} style={{ color: 'var(--text-muted)' }} />
+            </button>
+
             <input
               type="search"
               className="search-input"
@@ -30,11 +40,22 @@ export const Header = memo(function Header({ onOpenCreateModal, theme, onToggleT
               onChange={(e) => setSearchQuery(e.target.value)}
               aria-label="Search tasks"
             />
+
+            {searchQuery && (
+              <button
+                type="button"
+                className="search-clear-btn"
+                onClick={() => setSearchQuery('')}
+                aria-label="Clear search"
+              >
+                <X size={14} />
+              </button>
+            )}
           </div>
 
-          {/* Priority Filter Dropdown (Desktop/Tablet) */}
+          {/* Priority Select (Desktop/Tablet) */}
           <select
-            className="priority-select desktop-priority"
+            className="priority-select desktop-only-control"
             value={priorityFilter}
             onChange={(e) => setPriorityFilter(e.target.value)}
             aria-label="Filter tasks by priority"
@@ -46,12 +67,13 @@ export const Header = memo(function Header({ onOpenCreateModal, theme, onToggleT
             <option value="low">🟢 Low</option>
           </select>
 
-          {/* Single Theme Toggle Button */}
+          {/* Theme Toggle Button (All Devices) */}
           <button
             type="button"
             className="btn-secondary theme-btn"
             onClick={onToggleTheme}
             aria-label="Toggle light or dark theme"
+            title="Toggle theme"
           >
             {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
             <span className="theme-btn-label">{theme === 'dark' ? 'Light' : 'Dark'}</span>
@@ -60,7 +82,7 @@ export const Header = memo(function Header({ onOpenCreateModal, theme, onToggleT
           {/* Reset Board Button (Desktop/Tablet) */}
           <button
             type="button"
-            className="btn-secondary desktop-reset"
+            className="btn-secondary desktop-only-control"
             onClick={resetBoard}
             title="Reset board tasks to initial state"
             aria-label="Reset board tasks"
@@ -68,17 +90,18 @@ export const Header = memo(function Header({ onOpenCreateModal, theme, onToggleT
             <RotateCcw size={16} />
           </button>
 
-          {/* Mobile Filter & Search Drawer Toggle (Phone <768px only) */}
+          {/* Mobile Filter Drawer Toggle (<768px) */}
           <button
             type="button"
             className="btn-secondary mobile-filter-toggle"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             aria-label="Toggle filter menu"
+            title="Filters"
           >
             {isMobileMenuOpen ? <X size={18} /> : <SlidersHorizontal size={18} />}
           </button>
 
-          {/* Single Create Task CTA */}
+          {/* Create Task CTA (All Devices) */}
           <button
             type="button"
             className="btn-primary create-task-btn"
@@ -90,22 +113,11 @@ export const Header = memo(function Header({ onOpenCreateModal, theme, onToggleT
         </div>
       </div>
 
-      {/* Mobile Search & Filter Drawer (<768px) */}
+      {/* Mobile Filter Drawer (<768px) */}
       {isMobileMenuOpen && (
         <div className="mobile-filter-drawer">
-          <div className="mobile-search-bar">
-            <Search size={16} style={{ color: 'var(--text-muted)' }} />
-            <input
-              type="search"
-              className="search-input"
-              placeholder="Search tasks or tags..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              aria-label="Search tasks"
-            />
-          </div>
-
           <div className="mobile-drawer-row">
+            <label style={{ fontSize: '0.8125rem', fontWeight: 600, color: 'var(--text-muted)' }}>Priority Filter:</label>
             <select
               className="priority-select"
               style={{ flex: 1 }}
